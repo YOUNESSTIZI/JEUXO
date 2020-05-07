@@ -1,0 +1,196 @@
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+
+void affiche(int tab[3][3] ) // ce procedure affiche la matrice mais ca marche pas avec " * " 
+{
+	int i=0 , j=0;
+	
+	while(j<10)
+	{
+		printf("\n\n\n");
+		j++;	
+	}
+		
+	while(i<=2)
+	{
+		printf("\n| %d |\t| %d |\t| %d |\n", tab[i][0] , tab[i][1] , tab[i][2]);
+		i++;
+	}
+	
+}
+
+void definition() // ce procédure sert à definir le jeu !! 
+{
+	char c[2] ;
+	printf("(((------------------jeu de X/O ------------------)))");
+	printf("\n\n\t ce jeu est un jeu de 1/0 que vous connaissez ! \n\n une case rempli par 999 ca veut dire vide ! \n\n pour remplir une case vide il suffit de donner son numero equivalent \n\t\t de 1 a 9");
+	printf("\n\n\n\t bon pour qu'on soit efficace !! le premier coup sera 0 ! le deuxieme \n immediatement sera 1 .... ");
+	
+	printf("\n\n\n\n\t --- on commence ? .........(appuyez sur qlq chose)") ;
+	scanf("%s",c);
+	printf("\n\n\n\t\t\t-----Bon jeu-------- ");
+	
+}
+
+int accueil(int i) // cette fonction retourne la case à remplir par i(1 ou 0) ; 
+{
+	int c=0;
+	 
+	
+	while(true)  // ca veut dire que c'est pas un nombre qui est saisit !! alors on répète !!
+	{
+		switch(i)
+		{
+			case(0):
+				{
+					printf("\n\n 0 // \n\t\t");
+					break;
+				}
+			case(1):
+				{
+					printf("\n 1 // \n\t\t");
+					break;
+				}
+			
+		}
+		scanf("%d",&c);
+		if(0<c<10)
+			{
+				return c ;
+				break;
+			}
+		else
+			printf("\n\t\t apparament vous n'avez pas saisit un nombre qui correspond a l'une de ces cases .. reeassez !!")	;
+	}
+
+	
+	
+	
+	 	
+}
+
+void traitement(int M[3][3], int i) // ce procédure sert à remplir la case demandée par i (1 ou 0 ) et afficher la matrice à nouveau !
+{
+	int c = accueil(i) ;
+	bool affect = false ; // ca veut dire qu'on a pas saisit la valeur dans la case delandé :
+	
+	while(affect==false)
+	{
+		if(1<=c<=3 && M[0][c-1]!=0 && M[0][c-1]!=1) // une case déja rempli doit pas etre rempli autre fois !! 
+			{
+				M[0][c-1] = i ;
+				affect=true ;
+				break ;
+				
+			}
+			
+		else if(4<=c<=6 && M[1][c-4]!=0  && M[1][c-4]!=1 )
+			{
+				M[1][c-4] = i ;
+				affect=true ;
+				break ;
+			}
+			
+		else if(7<=c<=9 && M[2][c-7]!=0 && M[2][c-7]!=1 )
+			{
+				M[2][c-7] = i ;
+				affect=true;
+				break;
+			}
+				
+	
+	
+		 printf("\n --------peut etre la case demandee est deja remplii .. reessayez");
+		 c = accueil(i) ;
+		 
+	
+		
+	}
+	affiche(M) ;
+
+ } 
+
+int count(int M[3][3]) //ce procédure sert à demander à chaque fois au 2 joueurs de remplir la matrice et la traiter et la retenir  !! 
+{
+	static int i=0;
+	
+	traitement(M,i%2) ;
+	i++;
+	return ((i-1)%2);
+}
+
+int limit(int M[3][3]) //ce procédure sert à chaque fois qu'on remplissent la matrice d'observer est ce qu'on a bien une droite de 1 ou 0 .. si oui le jeu est fini !!
+{
+	int i ;
+	for(i=0;i<3;i++)
+	{																				// les cas possibles de droites sont :
+	     if( (M[i][0]==M[i][1] && M[i][1]==M[i][2] &&( M[i][2] ==1 ||M[i][2] ==0)))                                         //	M[0][0]=M[0][1]=M[0][2]				M[0][0]=M[1][0]=M[2][0]
+	       {
+	       		return 0;															// 	M[1][0]=M[1][1]=M[2][2]				M[0][1]=M[1][1]=M[1][2]
+				break ;  															 //  	M[2][0]=M[2][1]=M[2][2]				M[2][0]=M[2][1]=M[2][2]
+		   }																		//diagonales : M[0][0]=M[1][1]=M[2][2]
+		 else if(M[0][i]==M[1][i] && M[1][i]==M[2][i] && (M[2][i]==1 ||M[2][i]==0))											//              M[2][0]=M[1][1]=M[0][2]
+		 	{
+		 		return 0 ;
+		 		break;
+			 }
+		   	                                                                        
+     }
+     if(M[0][0]==M[1][1] && M[1][1]==M[2][2] && (M[2][2]==1 || M[2][2]==0))
+     	return 0 ;
+      
+     if( M[2][0]==M[1][1] && M[1][1]==M[0][2] && ( M[0][2]==0 || M[0][2]==1))
+	 	return 0 ;
+		 
+     
+	return 1;																				
+}																				
+
+void jouer(int M[3][3] ) // ce procédure permet de voir le progès du jeu et fait signe une fois une limite est atteinte ! .. b c'est pour initialiser i dans 'count' a chaque fois on relance le jeu !!
+{
+	int c , i=0 ;
+
+	while(limit(M)==1)
+	{	
+		c=count(M);
+		i++;
+		if(i>8)
+		{
+			printf("\n\t --- peut etre que vous devez rejouer hahah :) ");
+			break;
+		}
+		
+		
+	}
+	
+	if(i<8)
+		printf("\n\t----c'est fini , celui qui joue avec %d a gagne ! \n \t\t\t amusez vous ..",c);
+		
+	printf("\n\n\t-------A bientot ------\n\n");
+	
+}
+
+void repet() // ce procédure sert à repeter le jeu autant de fois aue l'utilisateur veut !
+{
+	
+}
+
+
+
+
+
+
+
+
+
+int main()
+{
+	int  tab[3][3] = {999,999,999,999,999,999,999,999,999}   ;
+	
+	
+	definition();
+	affiche(tab);
+	jouer(tab);
+
+}
