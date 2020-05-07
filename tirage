@@ -1,0 +1,219 @@
+#include<stdlib.h>
+#include<stdio.h>
+#include<time.h>
+#include<math.h>
+#include <string.h>
+
+int aleatoire() // la fonction choisit un nombre aléatoire !
+{
+	const int max = 100 , min = 1;
+	
+	return ((rand() % (max - min + 1)) + min ) ;
+}
+
+
+
+void definition() /*cette procedure sert a definir la procedure */
+{
+	char name[10]={0}  ;
+	
+	printf("--------(((JEU AU TIRAGE AU SORT)))---------\n\n\n") ;
+
+	printf("\t\t\t\t\t\tvous vous appellez(juste le nom) ... ??\n\n\t");
+	scanf("%s",name);
+	printf("\n\n\t bienvenue cher %s , \n\n --- Bon , voila le principe du JEU ..\n\n vous devez estimer un nombre choisit par le seveur EN MOINS DE FOIS \n\n\t\t n'ayez pas peur .. Je vais vous guider " , name);
+	printf("\n\t\t\t BONNE CHANCE %s", name); 
+	
+	printf("\n\n On commence mon ami ??  ") ;
+	printf("\n\n\n\t -- c'est parti --  ");
+}
+
+int definitiondouble() // c'est pour le mode multiple joueur !
+{
+	char name1[10]={0} ,name2[10]={0}  ;
+	int i, nmbre ;
+	
+	printf("--------(((JEU AU TIRAGE AU SORT)))---------\n\n\n") ;
+
+	printf("\t\t\t\t\t\tvous vous appellez ... ??\n\n\t");
+	scanf("%s %s",name1);
+	printf("\n\t\t\t\t\t et votre ami s'appelle ... ??\n\n\t");
+	scanf("%s %s",name2);
+	printf("\n\n\t bienvenue chers %s et %s , \n\n --- Bon , voila le principe du JEU ..\n\n vous devez estimer un nombre choisit par le seveur EN MOINS DE FOIS \n\n\t\t n'ayez pas peur .. Je vais vous guider " , name1 , name2);
+	printf("\n\t\t\t BONNE CHANCE %s et %s ", name1,name2); 
+	
+	printf("\n\n On commence mes amis ??  ") ;
+	printf("\n\n\n\t -- c'est parti --  ");
+	printf("\n\n\t\t l'un de vous mes chers doit cacher les yeux !!\n faites le %s :) \n %s saisit moi un nombre que %s doit deviner !!",name1,name2,name1) ;
+	scanf("%d",&nmbre);
+	for(i=0;i<100;i++)
+	{
+		printf("\n\n\n ");
+	}
+	printf("%s c a toi maintenant !!! " , name1);
+	return nmbre ;
+}
+
+void help(int myster, int nombrechoisit) // cette procedure sert à determiner si on s'approche ou on s'éloigne du nombre souhaité !
+{
+	int x ;
+	
+	x = abs(myster-nombrechoisit);
+	
+	
+	
+	if(x<10) 
+		{
+			printf("\n\n\t bon vous approchez du nombre !");
+		}
+		
+	else if(10<=x<=20) 
+		{
+			printf("\n\t\tvous eloignez un peu du nombre ! s'approchez !! ");
+		}
+			
+	else
+		{
+			printf("\n\t\t c'est tres tres loin malheureusement !!");	
+		}
+		
+	
+}
+
+void limit(int tentative ,int myster) // ce procedure determine si on a depassé la limtes 
+{
+	if (tentative>=10) 
+		printf("\n\n\t\t vous avez depassez la limite 10 tentative !! \n\n c'etait %d !! ",myster);	
+}
+
+int calcul(int myster,int nombrechoisit,int tentative) // cette fonction sert à comparer le nombre donner avec le myster et on ajoute 1 à la tentative donné !!
+{
+	if(tentative==10)
+	{
+		limit(tentative,myster);
+		return 0;
+	}
+		
+	if (nombrechoisit < myster) 
+	    {
+			tentative ++ ;
+			help(myster,nombrechoisit);
+			printf("\n c'est moins ! \n  ta %d tentative ", tentative) ;
+			return(tentative);
+	    }
+	
+	else if (nombrechoisit > myster)  
+	    {
+			tentative ++ ;
+			help(myster,nombrechoisit);
+			printf("\n c'est plus! \n\t c'est ta %d tentative ", tentative) ;
+			return(tentative);
+	    }
+	
+	else 
+		{
+			tentative ++ ;
+			printf("\n\n Ahhaaaah .. et enfin Mec t'a reussi \n .. c'etait %d notre nombre ..\n\t\t j espere que le jeu etait amusant pour toi ..\n t'as met juste  %d tentative !! \n\t\t\t\t BRAVO",myster,tentative);
+		
+			return 0 ;
+			
+		} 
+	
+}
+
+void modeunique() // c'est le mode d'un seule joueur !!
+{
+
+    int  repet , myster =0 , nombrechoisit , tentative =0 ;
+    
+	srand(time(NULL)); //il met le generateur a zero .. il faut le lettre une seule fois au programme . 
+	definition();
+	do
+	{
+		myster = aleatoire() ;	// le programme choisit un nombre aléatoire !
+	
+		
+   	
+	
+
+	
+		do 
+		{
+			printf("\n \t\t--quel est le nombre choisit !? --  ") ;
+			scanf("%d",&nombrechoisit); 	// l'utilisateur saisit son nombre 
+			tentative = calcul(myster,nombrechoisit,tentative);
+				
+		} while(tentative != 0);
+		
+		printf("\n\t voulez vous repeter ce jeux !!(1/0) ");
+		scanf("%d",&repet);
+		
+  
+	}while(repet==1);
+	
+	
+	
+	printf("\n\n -------------A LA PROCHAINE FOIS----------------- ");
+
+
+}
+
+void modemultiple()//le mode de 2 joueurs !!! 
+{
+	int myster,tentative=0,nombrechoisit,repet;
+
+	do
+	{
+		myster = definitiondouble(); 
+		do 
+		{
+			printf("\n \t\t--quel est le nombre choisit !? --  ") ;
+			scanf("%d",&nombrechoisit); 	// l'utilisateur saisit son nombre 
+			tentative = calcul(myster,nombrechoisit,tentative);
+			
+		} while(tentative != 0);
+			
+		printf("\n\t voulez vous repeter ce jeux !!(1/0) ");
+		scanf("%d",&repet);
+	}while(repet==1);
+
+		
+  
+	
+	
+	
+	
+	printf("\n\n -------------A LA PROCHAINE FOIS----------------- ");
+}
+
+
+int menu() // cette fonction sert à choisir le mode souhaité si c unique ou multiple
+{
+	int choix;
+	printf("\t\t BONJOUR.. choisissez un mode svp !! ....  ");
+	printf("\n\n1- mode unique\n2- mode multiple \n\t ");
+	scanf("%d",&choix);
+	return choix;
+}
+
+
+
+
+
+int main()
+{
+	
+	switch(menu()) 
+	{
+		case(1):
+			modeunique();
+			break;
+		case(2):
+			modemultiple();
+			break;
+		default:
+			printf("je connais pas ce choix !! ");
+			break;	
+	}
+
+}
